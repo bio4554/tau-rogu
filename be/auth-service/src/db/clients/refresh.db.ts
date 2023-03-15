@@ -20,3 +20,34 @@ export const firstWithUserId = async (userId: number) => {
 
   return result;
 };
+
+export const firstWithId = async (id: number) => {
+  const result = await db
+    .selectFrom("refresh")
+    .selectAll()
+    .where("refresh.id", "=", id)
+    .executeTakeFirst();
+
+  return result;
+};
+
+export const updateById = async (refreshRecord: RefreshRecord) => {
+  if (!refreshRecord.id) return undefined;
+  const result = await db
+    .updateTable("refresh")
+    .set({ user_id: refreshRecord.user_id, valid: refreshRecord.valid })
+    .where("refresh.id", "=", refreshRecord.id.__select__)
+    .executeTakeFirst();
+
+  return result;
+};
+
+export const invalidateAll = async (userId: number) => {
+  const result = await db
+    .updateTable("refresh")
+    .set({ valid: false })
+    .where("user_id", "=", userId)
+    .where("refresh.valid", "=", true)
+    .executeTakeFirst();
+  return result;
+};

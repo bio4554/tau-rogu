@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { NextFunction, Request, Response } from "express";
 import * as authService from "../services/auth.service";
 import * as tokenService from "../services/token.service";
@@ -18,7 +19,14 @@ export const signup = async (req: Request, res: Response) => {
     if (response === undefined) {
       res.status(400).send({ message: "Username taken" });
     }
-    res.status(201).send(response);
+    const accessToken = await tokenService.signJwt(response, "access");
+    const refreshToken = await tokenService.signJwt(response, "refresh");
+    res.cookie("refresh-token", refreshToken, {
+      secure: process.env.NODE_ENV !== "development",
+      httpOnly: true,
+      expires: dayjs().add(30, "days").toDate(),
+    });
+    res.status(201).send({ accessToken: accessToken, user: response });
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: "Check the log for more details" });
@@ -43,8 +51,14 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = await tokenService.signJwt(response, "access");
-    res.status(200).send({ accessToken: token, user: response });
+    const accessToken = await tokenService.signJwt(response, "access");
+    const refreshToken = await tokenService.signJwt(response, "refresh");
+    res.cookie("refresh-token", refreshToken, {
+      secure: process.env.NODE_ENV !== "development",
+      httpOnly: true,
+      expires: dayjs().add(30, "days").toDate(),
+    });
+    res.status(200).send({ accessToken: accessToken, user: response });
   } catch (err) {
     console.log(err);
     res.status(500).send({ message: "Check the log for more details" });
