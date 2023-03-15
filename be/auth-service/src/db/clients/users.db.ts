@@ -20,3 +20,13 @@ export const firstWithName = async (username: string) => {
 
   return result;
 };
+
+export const firstWithId = async (id: number) => {
+  const result = await db
+    .selectFrom("users")
+    .select(["users.id", "users.name"])
+    .where("users.id", "=", id)
+    .executeTakeFirst();
+
+  return result;
+};

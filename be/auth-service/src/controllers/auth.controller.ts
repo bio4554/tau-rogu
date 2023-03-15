@@ -53,7 +53,7 @@ export const login = async (req: Request, res: Response) => {
 
     const accessToken = await tokenService.signJwt(response, "access");
     const refreshToken = await tokenService.signJwt(response, "refresh");
-    res.cookie("refresh-token", refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       secure: process.env.NODE_ENV !== "development",
       httpOnly: true,
       expires: dayjs().add(30, "days").toDate(),
@@ -63,4 +63,58 @@ export const login = async (req: Request, res: Response) => {
     console.log(err);
     res.status(500).send({ message: "Check the log for more details" });
   }
+};
+
+export const refresh = async (req: Request, res: Response) => {
+  try {
+    const cookie = req.cookies.refreshToken;
+
+    if (!cookie) {
+      console.log("no refresh token");
+      res.status(401).send({ message: "Unauthorized" });
+      return;
+    }
+
+    var token;
+    try {
+      token = await tokenService.verifyJwt(cookie, "refresh");
+    } catch {
+      console.log("invalid jwt");
+      res.status(401).send({ message: "Unauthorized" });
+      return;
+    }
+
+    const refresh = await authService.getRefresh(token.id);
+
+    if (!refresh.valid) {
+      console.log("token is marked invalid in db");
+      res.status(401).send({ message: "Unauthorized" });
+      return;
+    }
+
+    const user = await authService.getUser(refresh.user_id);
+
+    const accessToken = await tokenService.signJwt(
+      { id: user.id, name: user.name, password: undefined },
+      "access"
+    );
+    const refreshToken = await tokenService.signJwt(
+      { id: user.id, name: user.name, password: undefined },
+      "refresh"
+    );
+    res.cookie("refreshToken", refreshToken, {
+      secure: process.env.NODE_ENV !== "development",
+      httpOnly: true,
+      expires: dayjs().add(30, "days").toDate(),
+    });
+    res.status(200).send({ accessToken: accessToken, user: user });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: "Check the log for more details" });
+  }
+};
+
+export const validate = async (req: Request, res: Response) => {
+  try {
+  } catch (err) {}
 };

@@ -1,5 +1,6 @@
 import * as usersDbClient from "../db/clients/users.db";
-import { UserRecord } from "../db/models/models";
+import * as refreshDbClient from "../db/clients/refresh.db";
+import { RefreshRecord, UserRecord } from "../db/models/models";
 import bcrypt from "bcrypt";
 
 export const createNewUser = async (username: string, password: string) => {
@@ -24,6 +25,16 @@ export const loginUser = async (username: string, password: string) => {
     return user;
   }
   return undefined;
+};
+
+export const getUser = async (userId: number) => {
+  const result = await usersDbClient.firstWithId(userId);
+  return result;
+};
+
+export const getRefresh = async (id: number) => {
+  const result = await refreshDbClient.firstWithId(id);
+  return result;
 };
 
 const hashPassword = async (password: string) => {
