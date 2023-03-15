@@ -5,3 +5,9 @@ export interface UserRecord {
   name: string;
   password: string;
 }
+
+export type UserRecordType = {
+  id?: number;
+  name: string;
+  password: string;
+};

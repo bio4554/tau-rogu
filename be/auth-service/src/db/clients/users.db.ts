@@ -10,3 +10,13 @@ export const insert = async (userRecord: UserRecord) => {
 
   return result.id;
 };
+
+export const firstWithName = async (username: string) => {
+  const result = await db
+    .selectFrom("users")
+    .selectAll()
+    .where("users.name", "=", username)
+    .executeTakeFirst();
+
+  return result;
+};
