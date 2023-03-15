@@ -16,10 +16,12 @@ export interface RefreshRecord {
   id?: Generated<number>;
   user_id: number;
   valid: boolean;
+  dateCreated: number;
 }
 
 export type RefreshRecordType = {
   id?: number;
   user_id: number;
   valid: boolean;
+  dateCreated: number;
 };

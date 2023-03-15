@@ -5,3 +5,8 @@ export const createPost = async (postRecord: PostRecord) => {
   const result = await postsDbClient.insert(postRecord);
   return result;
 };
+
+export const getUserPosts = async (userId: number) => {
+  const result = await postsDbClient.getUserPosts(userId);
+  return result;
+};

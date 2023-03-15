@@ -7,11 +7,31 @@ export const insert = async (postRecord: PostRecord) => {
     .values({
       title: postRecord.title,
       userId: postRecord.userId,
-      datePosted: Date.now(),
+      datePosted: postRecord.datePosted,
       description: postRecord.description,
     })
     .returning("id")
     .executeTakeFirstOrThrow();
 
   return result.id;
+};
+
+export const getUserPosts = async (userId: number) => {
+  const result = await db
+    .selectFrom("posts")
+    .selectAll()
+    .where("posts.userId", "=", userId)
+    .execute();
+
+  return result;
+};
+
+export const firstWithId = async (id: number) => {
+  const result = await db
+    .selectFrom("posts")
+    .selectAll()
+    .where("posts.id", "=", id)
+    .executeTakeFirst();
+
+  return result;
 };

@@ -4,7 +4,11 @@ import { RefreshRecord } from "../models/models";
 export const insert = async (refreshRecord: RefreshRecord) => {
   const result = await db
     .insertInto("refresh")
-    .values({ user_id: refreshRecord.user_id, valid: refreshRecord.valid })
+    .values({
+      user_id: refreshRecord.user_id,
+      valid: refreshRecord.valid,
+      dateCreated: refreshRecord.dateCreated,
+    })
     .returning("id")
     .executeTakeFirstOrThrow();
 
@@ -35,7 +39,11 @@ export const updateById = async (refreshRecord: RefreshRecord) => {
   if (!refreshRecord.id) return undefined;
   const result = await db
     .updateTable("refresh")
-    .set({ user_id: refreshRecord.user_id, valid: refreshRecord.valid })
+    .set({
+      user_id: refreshRecord.user_id,
+      valid: refreshRecord.valid,
+      dateCreated: refreshRecord.dateCreated,
+    })
     .where("refresh.id", "=", refreshRecord.id.__select__)
     .executeTakeFirst();
 

@@ -19,7 +19,11 @@ export const signJwt = async (
     if (!user.id) throw new Error("bad user id");
     const result = await refreshDbClient.invalidateAll(user.id);
     console.log(result);
-    const refreshAuth: RefreshRecord = { user_id: user.id, valid: true };
+    const refreshAuth: RefreshRecord = {
+      user_id: user.id,
+      valid: true,
+      dateCreated: Date.now(),
+    };
     const insertResult = await refreshDbClient.insert(refreshAuth);
     const token = jwt.sign({ id: insertResult }, config.JwtPrivateKey, {
       expiresIn: "20 days",

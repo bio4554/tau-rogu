@@ -18,6 +18,7 @@ export const signup = async (req: Request, res: Response) => {
     const response = await authService.createNewUser(username, password);
     if (response === undefined) {
       res.status(400).send({ message: "Username taken" });
+      return;
     }
     const accessToken = await tokenService.signJwt(response, "access");
     const refreshToken = await tokenService.signJwt(response, "refresh");
