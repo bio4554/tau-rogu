@@ -11,3 +11,15 @@ export type UserRecordType = {
   name: string;
   password: string;
 };
+
+export interface RefreshRecord {
+  id?: Generated<number>;
+  user_id: number;
+  valid: boolean;
+}
+
+export type RefreshRecordType = {
+  id?: number;
+  user_id: number;
+  valid: boolean;
+};

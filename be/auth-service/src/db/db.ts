@@ -1,11 +1,12 @@
 import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import * as Cursor from "pg-cursor";
-import { UserRecord } from "./models/models";
+import { RefreshRecord, UserRecord } from "./models/models";
 import config from "../app.config";
 
 interface Database {
   users: UserRecord;
+  refresh: RefreshRecord;
 }
 
 export const db = new Kysely<Database>({
