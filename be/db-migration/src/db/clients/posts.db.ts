@@ -3,7 +3,7 @@ import { PostRecord } from "../models/models";
 
 export const insert = async (postRecord: PostRecord) => {
   const result = await db
-    .insertInto("post")
+    .insertInto("posts")
     .values({
       title: postRecord.title,
       userId: postRecord.userId,
@@ -18,9 +18,9 @@ export const insert = async (postRecord: PostRecord) => {
 
 export const getUserPosts = async (userId: number) => {
   const result = await db
-    .selectFrom("post")
+    .selectFrom("posts")
     .selectAll()
-    .where("post.userId", "=", userId)
+    .where("posts.userId", "=", userId)
     .execute();
 
   return result;
@@ -28,9 +28,9 @@ export const getUserPosts = async (userId: number) => {
 
 export const firstWithId = async (id: number) => {
   const result = await db
-    .selectFrom("post")
+    .selectFrom("posts")
     .selectAll()
-    .where("post.id", "=", id)
+    .where("posts.id", "=", id)
     .executeTakeFirst();
 
   return result;

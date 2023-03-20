@@ -3,7 +3,7 @@ import { UserRecord } from "../models/models";
 
 export const insert = async (userRecord: UserRecord) => {
   const result = await db
-    .insertInto("user")
+    .insertInto("users")
     .values({ name: userRecord.name, password: userRecord.password })
     .returning("id")
     .executeTakeFirstOrThrow();
@@ -13,9 +13,9 @@ export const insert = async (userRecord: UserRecord) => {
 
 export const firstWithName = async (username: string) => {
   const result = await db
-    .selectFrom("user")
+    .selectFrom("users")
     .selectAll()
-    .where("user.name", "=", username)
+    .where("users.name", "=", username)
     .executeTakeFirst();
 
   return result;
@@ -23,9 +23,9 @@ export const firstWithName = async (username: string) => {
 
 export const firstWithId = async (id: number) => {
   const result = await db
-    .selectFrom("user")
-    .select(["user.id", "user.name"])
-    .where("user.id", "=", id)
+    .selectFrom("users")
+    .select(["users.id", "users.name"])
+    .where("users.id", "=", id)
     .executeTakeFirst();
 
   return result;

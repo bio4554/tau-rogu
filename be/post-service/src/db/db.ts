@@ -5,9 +5,9 @@ import { PostRecord, RefreshRecord, UserRecord } from "./models/models";
 import config from "../app.config";
 
 interface Database {
-  users: UserRecord;
+  user: UserRecord;
   refresh: RefreshRecord;
-  posts: PostRecord;
+  post: PostRecord;
 }
 
 export const db = new Kysely<Database>({
