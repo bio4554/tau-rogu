@@ -10,8 +10,15 @@ export const createNewUser = async (username: string, password: string) => {
     return undefined;
   }
   password = await hashPassword(password);
-  const id = await usersDbClient.insert({ name: username, password: password });
-  return { name: username, password: password, id: id };
+  const id = await usersDbClient.insert({
+    name: username,
+    password: password
+  });
+  return {
+    name: username,
+    password: password,
+    id: id
+  };
 };
 
 export const loginUser = async (username: string, password: string) => {

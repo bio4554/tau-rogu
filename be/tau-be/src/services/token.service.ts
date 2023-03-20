@@ -10,9 +10,15 @@ export const signJwt = async (
   if (jwtType === 'access') {
     const key = config.JwtPrivateKey;
     const token = jwt.sign(
-      { id: user.id!, username: user.name },
+      {
+        id: user.id!,
+        username: user.name
+      },
       config.JwtPrivateKey,
-      { expiresIn: '30 minutes', algorithm: 'RS256' }
+      {
+        expiresIn: '30 minutes',
+        algorithm: 'RS256'
+      }
     );
     return token;
   } else {

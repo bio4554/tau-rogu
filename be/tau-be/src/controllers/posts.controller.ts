@@ -9,7 +9,9 @@ export const create = async (req: Request, res: Response) => {
 
     if (!title || !description) {
       console.log('title or desc was null');
-      res.status(400).send({ message: 'Title or description was null' });
+      res.status(400).send({
+        message: 'Title or description was null'
+      });
       return;
     }
 
@@ -35,7 +37,9 @@ export const create = async (req: Request, res: Response) => {
     res.status(201).send(response);
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: 'Check the log for details' });
+    res.status(500).send({
+      message: 'Check the log for details'
+    });
   }
 };
 
@@ -50,6 +54,8 @@ export const userPosts = async (req: Request, res: Response) => {
     res.status(200).send(posts);
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: 'Check the log for details' });
+    res.status(500).send({
+      message: 'Check the log for details'
+    });
   }
 };

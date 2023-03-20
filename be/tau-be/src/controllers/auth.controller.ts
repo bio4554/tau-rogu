@@ -11,13 +11,17 @@ export const signup = async (req: Request, res: Response) => {
       console.log('username or password was null');
       // TODO dont log password
       console.log(`USER: ${username} PASS: ${password}`);
-      res.status(400).send({ message: 'Malformed request' });
+      res.status(400).send({
+        message: 'Malformed request'
+      });
       return;
     }
 
     const response = await authService.createNewUser(username, password);
     if (response === undefined) {
-      res.status(400).send({ message: 'Username taken' });
+      res.status(400).send({
+        message: 'Username taken'
+      });
       return;
     }
     const accessToken = await tokenService.signJwt(response, 'access');
@@ -27,10 +31,15 @@ export const signup = async (req: Request, res: Response) => {
       httpOnly: true,
       expires: dayjs().add(30, 'days').toDate()
     });
-    res.status(201).send({ accessToken: accessToken, user: response });
+    res.status(201).send({
+      accessToken: accessToken,
+      user: response
+    });
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: 'Check the log for more details' });
+    res.status(500).send({
+      message: 'Check the log for more details'
+    });
   }
 };
 
@@ -42,13 +51,17 @@ export const login = async (req: Request, res: Response) => {
       console.log('username or password was null');
       // TODO dont log password
       console.log(`USER: ${username} PASS: ${password}`);
-      res.status(400).send({ message: 'Malformed request' });
+      res.status(400).send({
+        message: 'Malformed request'
+      });
       return;
     }
 
     const response = await authService.loginUser(username, password);
     if (!response) {
-      res.status(401).send({ message: 'Unauthorized' });
+      res.status(401).send({
+        message: 'Unauthorized'
+      });
       return;
     }
 
@@ -59,10 +72,15 @@ export const login = async (req: Request, res: Response) => {
       httpOnly: true,
       expires: dayjs().add(30, 'days').toDate()
     });
-    res.status(200).send({ accessToken: accessToken, user: response });
+    res.status(200).send({
+      accessToken: accessToken,
+      user: response
+    });
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: 'Check the log for more details' });
+    res.status(500).send({
+      message: 'Check the log for more details'
+    });
   }
 };
 
@@ -72,7 +90,9 @@ export const refresh = async (req: Request, res: Response) => {
 
     if (!cookie) {
       console.log('no refresh token');
-      res.status(401).send({ message: 'Unauthorized' });
+      res.status(401).send({
+        message: 'Unauthorized'
+      });
       return;
     }
 
@@ -81,7 +101,9 @@ export const refresh = async (req: Request, res: Response) => {
       token = await tokenService.verifyJwt(cookie, 'refresh');
     } catch {
       console.log('invalid jwt');
-      res.status(401).send({ message: 'Unauthorized' });
+      res.status(401).send({
+        message: 'Unauthorized'
+      });
       return;
     }
 
@@ -89,18 +111,28 @@ export const refresh = async (req: Request, res: Response) => {
 
     if (!refresh.valid) {
       console.log('token is marked invalid in db');
-      res.status(401).send({ message: 'Unauthorized' });
+      res.status(401).send({
+        message: 'Unauthorized'
+      });
       return;
     }
 
     const user = await authService.getUser(refresh.user_id);
 
     const accessToken = await tokenService.signJwt(
-      { id: user.id, name: user.name, password: undefined },
+      {
+        id: user.id,
+        name: user.name,
+        password: undefined
+      },
       'access'
     );
     const refreshToken = await tokenService.signJwt(
-      { id: user.id, name: user.name, password: undefined },
+      {
+        id: user.id,
+        name: user.name,
+        password: undefined
+      },
       'refresh'
     );
     res.cookie('refreshToken', refreshToken, {
@@ -108,10 +140,15 @@ export const refresh = async (req: Request, res: Response) => {
       httpOnly: true,
       expires: dayjs().add(30, 'days').toDate()
     });
-    res.status(200).send({ accessToken: accessToken, user: user });
+    res.status(200).send({
+      accessToken: accessToken,
+      user: user
+    });
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: 'Check the log for more details' });
+    res.status(500).send({
+      message: 'Check the log for more details'
+    });
   }
 };
 
