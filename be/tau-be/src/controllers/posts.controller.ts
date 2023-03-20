@@ -1,15 +1,15 @@
-import { NextFunction, Request, Response } from "express";
-import { PostRecord, PostRecordType } from "../db/models/models";
-import { AuthRequest } from "../middleware/auth";
-import * as postService from "../services/posts.service";
+import { NextFunction, Request, Response } from 'express';
+import { PostRecord, PostRecordType } from '../db/models/models';
+import { AuthRequest } from '../middleware/auth';
+import * as postService from '../services/posts.service';
 
 export const create = async (req: Request, res: Response) => {
   try {
     const { title, description } = req.body;
 
     if (!title || !description) {
-      console.log("title or desc was null");
-      res.status(400).send({ message: "Title or description was null" });
+      console.log('title or desc was null');
+      res.status(400).send({ message: 'Title or description was null' });
       return;
     }
 
@@ -19,7 +19,7 @@ export const create = async (req: Request, res: Response) => {
       title: title,
       description: description,
       datePosted: Date.now(),
-      userId: token.id,
+      userId: token.id
     };
 
     const result = await postService.createPost(postRecord);
@@ -29,13 +29,13 @@ export const create = async (req: Request, res: Response) => {
       title: postRecord.title,
       description: postRecord.description,
       datePosted: postRecord.datePosted,
-      userId: postRecord.userId,
+      userId: postRecord.userId
     };
 
     res.status(201).send(response);
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: "Check the log for details" });
+    res.status(500).send({ message: 'Check the log for details' });
   }
 };
 
@@ -50,6 +50,6 @@ export const userPosts = async (req: Request, res: Response) => {
     res.status(200).send(posts);
   } catch (err) {
     console.log(err);
-    res.status(500).send({ message: "Check the log for details" });
+    res.status(500).send({ message: 'Check the log for details' });
   }
 };

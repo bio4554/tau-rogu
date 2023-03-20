@@ -1,11 +1,11 @@
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 dotenv.config();
-import express, { NextFunction, Request, Response } from "express";
-import helmet from "helmet";
-import config from "./app.config";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import routes from "./routes";
+import express, { NextFunction, Request, Response } from 'express';
+import helmet from 'helmet';
+import config from './app.config';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import routes from './routes';
 
 const loggerMiddleware = (req: Request, res: Response, next: NextFunction) => {
   console.log(`${req.method} ${req.url}`);
@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(loggerMiddleware);
 
-app.use("/", routes);
+app.use('/', routes);
 
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);

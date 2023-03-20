@@ -1,7 +1,7 @@
-import * as usersDbClient from "../db/clients/users.db";
-import * as refreshDbClient from "../db/clients/refresh.db";
-import { RefreshRecord, UserRecord } from "../db/models/models";
-import bcrypt from "bcrypt";
+import * as usersDbClient from '../db/clients/users.db';
+import * as refreshDbClient from '../db/clients/refresh.db';
+import { RefreshRecord, UserRecord } from '../db/models/models';
+import bcrypt from 'bcrypt';
 
 export const createNewUser = async (username: string, password: string) => {
   // check if user exists
