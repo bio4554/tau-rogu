@@ -59,3 +59,19 @@ export const userPosts = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getFeed = async (req: Request, res: Response) => {
+  try {
+    const token = (req as AuthRequest).token;
+    const userId = parseInt(token.id);
+
+    const posts = await postService.getUserFeed(userId);
+
+    res.status(200).send(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      message: 'Check the log for details'
+    });
+  }
+};
