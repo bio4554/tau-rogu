@@ -1,4 +1,4 @@
-import { Generated } from "kysely";
+import { Generated } from 'kysely';
 
 export interface UserRecord {
   id?: Generated<number>;
@@ -40,4 +40,18 @@ export type PostRecordType = {
   userId: number;
   datePosted: number;
   description: string;
+};
+
+export interface FollowRecord {
+  id?: Generated<number>;
+  following: number;
+  follower: number;
+  datePosted: number;
+}
+
+export type FollowRecordType = {
+  id?: number;
+  following: number;
+  follower: number;
+  datePosted: number;
 };
