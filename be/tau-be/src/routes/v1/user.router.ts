@@ -5,5 +5,6 @@ import { auth } from '../../middleware/auth';
 const router = Router();
 
 router.get('/:userId', auth, usersController.getUser);
+router.post('/:userId/follow', auth, usersController.followUser);
 
 export default router;

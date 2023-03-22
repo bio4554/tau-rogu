@@ -3,11 +3,11 @@ import { Kysely, sql } from "kysely";
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable("follow")
-    .addColumn("id", "bigserial", (col) => col.primaryKey())
-    .addColumn("following", "bigint", (col) =>
+    .addColumn("id", "serial", (col) => col.primaryKey())
+    .addColumn("following", "integer", (col) =>
       col.references("user.id").notNull()
     )
-    .addColumn("follower", "bigint", (col) =>
+    .addColumn("follower", "integer", (col) =>
       col.references("user.id").notNull()
     )
     .addColumn("datePosted", "bigint", (col) => col.notNull())

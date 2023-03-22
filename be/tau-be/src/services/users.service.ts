@@ -1,5 +1,6 @@
 import * as usersDbClient from '../db/clients/users.db';
 import * as followsDbClient from '../db/clients/follows.db';
+import { FollowRecord } from '../db/models/models';
 
 export const getUser = async (userId: number, targetUserId: number) => {
   // get all following
@@ -9,4 +10,18 @@ export const getUser = async (userId: number, targetUserId: number) => {
     return result;
   }
   return undefined;
+};
+
+export const followUser = async (userId: number, targetUserId: number) => {
+  // validate user exists
+  const targetUser = await usersDbClient.firstWithId(targetUserId);
+  if (targetUser === undefined) return undefined;
+  const followRecord: FollowRecord = {
+    following: targetUserId,
+    follower: userId,
+    datePosted: Date.now()
+  };
+
+  const response = await followsDbClient.insert(followRecord);
+  return response;
 };

@@ -32,5 +32,5 @@ export const getUserFollowing = async (userId: number) => {
     .where('follow.follower', '=', userId)
     .execute();
 
-  return result.map((f) => f.following);
+  return result.map((f) => f.following as number);
 };
