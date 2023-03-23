@@ -6,11 +6,14 @@ import config from './app.config';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import routes from './routes';
+import * as blobClient from './db/blob/blob.client';
 
 const loggerMiddleware = (req: Request, res: Response, next: NextFunction) => {
   console.log(`${req.method} ${req.url}`);
   next();
 };
+
+blobClient.checkBucket(config.BucketName);
 
 const app = express();
 const port = parseInt(config.Port);

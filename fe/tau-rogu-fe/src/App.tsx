@@ -1,23 +1,21 @@
 import React from 'react';
 import logo from './logo.svg';
+import { Card, CardBody, ChakraProvider, Input, Text } from '@chakra-ui/react';
 import './App.css';
-
-const Post = () => {
-  return (
-    <div className='vstack'>
-      <h3>Title</h3>
-      <h4>username</h4>
-    </div>
-  );
-};
 
 function App() {
   return (
-    <div className='vstack center'>
-      <h1>Header</h1>
-      <Post />
-      <Post />
-    </div>
+    <ChakraProvider>
+      <div>
+        <Card>
+          <CardBody>
+            <Text>Hello</Text>
+            <Input placeholder='Basic usage' />
+          </CardBody>
+        </Card>
+        
+      </div>
+    </ChakraProvider>
   );
 }
 
