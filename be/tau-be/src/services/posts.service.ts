@@ -5,7 +5,7 @@ import { PostRecord, PostRecordType } from '../db/models/models';
 
 export const createPost = async (postRecord: PostRecord) => {
   const result = await postsDbClient.insert(postRecord);
-  await blobClient.uploadObject();
+  //await blobClient.uploadObject();
   return result;
 };
 

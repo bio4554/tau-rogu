@@ -42,6 +42,15 @@ export type PostRecordType = {
   description: string;
 };
 
+export type PostRecordDto = {
+  id?: number;
+  title: string;
+  userId: number;
+  userName: string;
+  datePosted: number;
+  description: string;
+};
+
 export interface FollowRecord {
   id?: Generated<number>;
   following: number;

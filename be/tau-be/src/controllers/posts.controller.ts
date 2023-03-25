@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { PostRecord, PostRecordType } from '../db/models/models';
+import { PostRecord, PostRecordDto, PostRecordType } from '../db/models/models';
 import { AuthRequest } from '../middleware/auth';
 import * as postService from '../services/posts.service';
 
@@ -26,12 +26,13 @@ export const create = async (req: Request, res: Response) => {
 
     const result = await postService.createPost(postRecord);
 
-    const response: PostRecordType = {
-      id: result,
+    const response: PostRecordDto = {
+      id: result.postId,
       title: postRecord.title,
       description: postRecord.description,
       datePosted: postRecord.datePosted,
-      userId: postRecord.userId
+      userId: postRecord.userId,
+      userName: result.username
     };
 
     res.status(201).send(response);

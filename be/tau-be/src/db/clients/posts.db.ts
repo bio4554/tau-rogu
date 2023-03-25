@@ -1,5 +1,5 @@
 import { db } from '../db';
-import { PostRecord, PostRecordType } from '../models/models';
+import { PostRecord, PostRecordDto, PostRecordType } from '../models/models';
 
 export const insert = async (postRecord: PostRecord) => {
   const result = await db
@@ -13,7 +13,13 @@ export const insert = async (postRecord: PostRecord) => {
     .returning('id')
     .executeTakeFirstOrThrow();
 
-  return result.id;
+  const username = await db
+    .selectFrom('user')
+    .select(['user.name'])
+    .where('user.id', '=', postRecord.userId)
+    .executeTakeFirstOrThrow();
+
+  return { postId: result.id, username: username.name };
 };
 
 export const getUserPosts = async (userId: number) => {
@@ -45,14 +51,28 @@ export const getFeedFromUsers = async (users: number[]) => {
     .limit(10)
     .execute();
 
+  const idMap = result.map((p) => p.userId);
+
+  if (idMap.length === 0) {
+    return [] as PostRecordDto[];
+  }
+
+  // todo please fix this query dumbass
+  const usernameMap = await db
+    .selectFrom('user')
+    .select(['name', 'id'])
+    .where('user.id', 'in', idMap)
+    .execute();
+
   return result.map(
     (p) =>
-      <PostRecordType>{
+      <PostRecordDto>{
         id: p.id,
         title: p.title,
         datePosted: p.datePosted,
         userId: p.userId,
-        description: p.description
+        description: p.description,
+        userName: usernameMap.find((u) => p.userId == u.id).name
       }
   );
 };
