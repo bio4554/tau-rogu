@@ -1,16 +1,27 @@
-import { S3Client } from '@aws-sdk/client-s3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import appConfig from '../../app.config';
 
-const s3 = new S3Client({});
+const s3 = new S3Client({
+  endpoint: 'http://localhost:9000',
+  region: 'test',
+  credentials: {
+    accessKeyId: appConfig.AwsAccessKey,
+    secretAccessKey: appConfig.AwsSecretKey
+  },
+  forcePathStyle: true
+});
 
-export const checkBucket = async (s3: S3Client, bucket: string) => {
+export const uploadObject = async () => {
+  const command = new PutObjectCommand({
+    Bucket: appConfig.BucketName,
+    Key: 'test',
+    Body: 'test'
+  });
+
   try {
-    console.log('bucket exists');
-
-    return true;
+    const response = await s3.send(command);
+    console.log(response);
   } catch (error) {
-    console.log('bucket doesnt exist');
-
-    return false;
+    console.error(error);
   }
 };

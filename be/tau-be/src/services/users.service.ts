@@ -12,6 +12,11 @@ export const getUser = async (userId: number, targetUserId: number) => {
   return undefined;
 };
 
+export const getSingleUser = async (userId: number) => {
+  const result = await usersDbClient.firstWithId(userId);
+  return result;
+};
+
 export const followUser = async (userId: number, targetUserId: number) => {
   // validate user exists
   const targetUser = await usersDbClient.firstWithId(targetUserId);

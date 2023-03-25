@@ -22,6 +22,26 @@ export const getUser = async (req: Request, res: Response) => {
   res.status(200).send(user);
 };
 
+export const getLoggedInUser = async (req: Request, res: Response) => {
+  const token = (req as AuthRequest).token;
+  const targetUserId = token.id;
+
+  if (targetUserId === undefined) {
+    console.log('userId null');
+    res.status(400).send({ message: 'userId null' });
+    return;
+  }
+
+  const user = await userService.getSingleUser(token.id);
+  if (user === undefined) {
+    console.log('user not following target user for getUser');
+    res.status(400).send({ message: 'User not following target user' });
+    return;
+  }
+
+  res.status(200).send(user);
+};
+
 export const followUser = async (req: Request, res: Response) => {
   const token = (req as AuthRequest).token;
   const targetUserId = parseInt(req.params.userId);

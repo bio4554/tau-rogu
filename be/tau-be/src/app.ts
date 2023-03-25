@@ -13,8 +13,6 @@ const loggerMiddleware = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-blobClient.checkBucket(config.BucketName);
-
 const app = express();
 const port = parseInt(config.Port);
 app.use(helmet());
