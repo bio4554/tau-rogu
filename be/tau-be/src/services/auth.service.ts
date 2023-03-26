@@ -1,6 +1,7 @@
 import * as usersDbClient from '../db/clients/users.db';
 import * as refreshDbClient from '../db/clients/refresh.db';
-import { RefreshRecord, UserRecord } from '../db/models/models';
+import * as profilesDbClient from '../db/clients/profile.db';
+import { RefreshRecord, UserRecord, UserRecordType } from '../db/models/models';
 import bcrypt from 'bcrypt';
 
 export const createNewUser = async (username: string, password: string) => {
@@ -10,14 +11,24 @@ export const createNewUser = async (username: string, password: string) => {
     return undefined;
   }
   password = await hashPassword(password);
-  const id = await usersDbClient.insert({
+  const result = await usersDbClient.insert({
     name: username,
-    password: password
+    password: password,
+    joinedDate: Date.now()
   });
+
+  // create empty profile for later
+  const profileResult = await profilesDbClient.insert({
+    userId: result.id,
+    bio: '',
+    fullname: username
+  });
+
   return {
     name: username,
     password: password,
-    id: id
+    id: result.id,
+    joinedDate: result.joinedDate
   };
 };
 
@@ -34,7 +45,7 @@ export const loginUser = async (username: string, password: string) => {
   return undefined;
 };
 
-export const getUser = async (userId: number) => {
+export const getUser = async (userId: number): Promise<UserRecordType> => {
   const result = await usersDbClient.firstWithId(userId);
   return result;
 };

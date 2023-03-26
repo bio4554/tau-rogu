@@ -1,5 +1,6 @@
 import * as usersDbClient from '../db/clients/users.db';
 import * as followsDbClient from '../db/clients/follows.db';
+import * as profilesDbClient from '../db/clients/profile.db';
 import { FollowRecord } from '../db/models/models';
 
 export const getUser = async (userId: number, targetUserId: number) => {
@@ -18,6 +19,18 @@ export const getUser = async (userId: number, targetUserId: number) => {
 export const getSingleUser = async (userId: number) => {
   const result = await usersDbClient.firstWithId(userId);
   return result;
+};
+
+export const getUserProfile = async (userId: number) => {
+  const user = await usersDbClient.firstWithId(userId);
+
+  if (user === undefined) return undefined;
+
+  const profile = await profilesDbClient.firstByUserId(userId);
+
+  if (profile === undefined) return undefined;
+
+  return { profile: profile, user: user };
 };
 
 export const followUser = async (userId: number, targetUserId: number) => {

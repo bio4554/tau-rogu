@@ -5,6 +5,7 @@ import {
   FollowRecord,
   PostRecord,
   RefreshRecord,
+  UserProfileRecord,
   UserRecord
 } from './models/models';
 import config from '../app.config';
@@ -14,6 +15,7 @@ interface Database {
   refresh: RefreshRecord;
   post: PostRecord;
   follow: FollowRecord;
+  user_profile: UserProfileRecord;
 }
 
 export const db = new Kysely<Database>({

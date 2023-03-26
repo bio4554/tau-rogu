@@ -4,6 +4,7 @@ export interface UserRecord {
   id?: Generated<number>;
   name: string;
   password: string;
+  joinedDate: number;
 }
 
 export type UserRecordType = {
@@ -39,3 +40,10 @@ export type PostRecordType = {
   datePosted: number;
   description: string;
 };
+
+export interface UserProfileRecord {
+  id?: Generated<number>;
+  userId: number;
+  bio: string;
+  fullname: string;
+}

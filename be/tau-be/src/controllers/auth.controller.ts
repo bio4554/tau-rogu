@@ -123,7 +123,8 @@ export const refresh = async (req: Request, res: Response) => {
       {
         id: user.id,
         name: user.name,
-        password: undefined
+        password: undefined,
+        joinedDate: user.joinedDate
       },
       'access'
     );
@@ -131,7 +132,8 @@ export const refresh = async (req: Request, res: Response) => {
       {
         id: user.id,
         name: user.name,
-        password: undefined
+        password: undefined,
+        joinedDate: user.joinedDate
       },
       'refresh'
     );

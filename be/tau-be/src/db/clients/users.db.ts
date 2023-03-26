@@ -4,11 +4,15 @@ import { UserRecord } from '../models/models';
 export const insert = async (userRecord: UserRecord) => {
   const result = await db
     .insertInto('user')
-    .values({ name: userRecord.name, password: userRecord.password })
-    .returning('id')
+    .values({
+      name: userRecord.name,
+      password: userRecord.password,
+      joinedDate: userRecord.joinedDate
+    })
+    .returning(['id', 'joinedDate'])
     .executeTakeFirstOrThrow();
 
-  return result.id;
+  return result;
 };
 
 export const firstWithName = async (username: string) => {
@@ -24,7 +28,7 @@ export const firstWithName = async (username: string) => {
 export const firstWithId = async (id: number) => {
   const result = await db
     .selectFrom('user')
-    .select(['user.id', 'user.name'])
+    .select(['user.id', 'user.name', 'user.joinedDate'])
     .where('user.id', '=', id)
     .executeTakeFirst();
 
@@ -34,7 +38,7 @@ export const firstWithId = async (id: number) => {
 export const searchByName = async (username: string, amount: number) => {
   const result = await db
     .selectFrom('user')
-    .select(['user.name', 'user.id'])
+    .select(['user.name', 'user.id', 'user.joinedDate'])
     .where('user.name', 'ilike', `%${username}%`)
     .orderBy('user.name', 'desc')
     .limit(amount)

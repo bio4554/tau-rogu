@@ -4,12 +4,14 @@ export interface UserRecord {
   id?: Generated<number>;
   name: string;
   password: string;
+  joinedDate: number;
 }
 
 export type UserRecordType = {
   id?: number;
   name: string;
-  password: string;
+  password?: string;
+  joinedDate: number;
 };
 
 export interface RefreshRecord {
@@ -63,4 +65,18 @@ export type FollowRecordType = {
   following: number;
   follower: number;
   datePosted: number;
+};
+
+export interface UserProfileRecord {
+  id?: Generated<number>;
+  userId: number;
+  bio: string;
+  fullname: string;
+}
+
+export type UserProfileType = {
+  id?: number;
+  userId: number;
+  bio: string;
+  fullname: string;
 };
