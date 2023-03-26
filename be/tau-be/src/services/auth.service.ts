@@ -44,6 +44,11 @@ export const getRefresh = async (id: number) => {
   return result;
 };
 
+export const invalidateRefresh = async (id: number) => {
+  const result = await refreshDbClient.invalidateAll(id);
+  return result;
+};
+
 const hashPassword = async (password: string) => {
   const salt = await bcrypt.genSalt(10);
   const hashed = await bcrypt.hash(password, salt);

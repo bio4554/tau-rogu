@@ -15,7 +15,9 @@ export const getUserPosts = async (userId: number) => {
 };
 
 export const getUserFeed = async (userId: number) => {
-  const following = await followDbClient.getUserFollowing(userId);
+  let following = await followDbClient.getUserFollowing(userId);
+
+  following = [...following, userId];
 
   if (following === undefined || following.length === 0) {
     return [] as PostRecordType[];

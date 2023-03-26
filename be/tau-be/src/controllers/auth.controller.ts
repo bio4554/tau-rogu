@@ -152,6 +152,45 @@ export const refresh = async (req: Request, res: Response) => {
   }
 };
 
+export const logout = async (req: Request, res: Response) => {
+  try {
+    const cookie = req.cookies.refreshToken;
+
+    if (!cookie) {
+      console.log('no refresh token');
+      res.status(401).send({
+        message: 'Unauthorized'
+      });
+      return;
+    }
+
+    var token;
+    try {
+      token = await tokenService.verifyJwt(cookie, 'refresh');
+    } catch {
+      console.log('invalid jwt');
+      res.status(401).send({
+        message: 'Unauthorized'
+      });
+      return;
+    }
+
+    const refresh = await authService.getRefresh(token.id);
+
+    if (!refresh.valid) {
+      console.log('token is marked invalid in db');
+      res.status(401).send({
+        message: 'Unauthorized'
+      });
+      return;
+    }
+
+    await authService.invalidateRefresh(refresh.user_id);
+
+    res.status(200).send({ message: 'Logged out user' });
+  } catch (error) {}
+};
+
 export const validate = async (req: Request, res: Response) => {
   try {
   } catch (err) {}

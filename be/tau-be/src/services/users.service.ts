@@ -3,8 +3,11 @@ import * as followsDbClient from '../db/clients/follows.db';
 import { FollowRecord } from '../db/models/models';
 
 export const getUser = async (userId: number, targetUserId: number) => {
-  // get all following
-  const following = await followsDbClient.getUserFollowing(userId);
+  // get all following and include current user
+  const following = [
+    ...(await followsDbClient.getUserFollowing(userId)),
+    userId
+  ];
   if (following.includes(targetUserId)) {
     const result = await usersDbClient.firstWithId(userId);
     return result;
@@ -29,4 +32,9 @@ export const followUser = async (userId: number, targetUserId: number) => {
 
   const response = await followsDbClient.insert(followRecord);
   return response;
+};
+
+export const searchByName = async (username: string) => {
+  const result = await usersDbClient.searchByName(username, 30);
+  return result;
 };

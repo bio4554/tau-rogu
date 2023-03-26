@@ -62,3 +62,21 @@ export const followUser = async (req: Request, res: Response) => {
 
   res.status(200).send({ message: 'followed user' });
 };
+
+export const searchByName = async (req: Request, res: Response) => {
+  try {
+    const targetName = req.query.username as string;
+
+    if (targetName === undefined) {
+      console.log('targetName was null when searching');
+      res.status(400).send({ message: 'bad request' });
+      return;
+    }
+
+    const result = await userService.searchByName(targetName);
+    res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'check the log for details' });
+  }
+};
