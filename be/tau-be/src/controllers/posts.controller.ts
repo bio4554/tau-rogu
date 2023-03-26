@@ -21,7 +21,8 @@ export const create = async (req: Request, res: Response) => {
       title: title,
       description: description,
       datePosted: Date.now(),
-      userId: token.id
+      userId: token.id,
+      isDeleted: true
     };
 
     const result = await postService.createPost(postRecord);
@@ -32,7 +33,8 @@ export const create = async (req: Request, res: Response) => {
       description: postRecord.description,
       datePosted: postRecord.datePosted,
       userId: postRecord.userId,
-      userName: result.username
+      userName: result.username,
+      isDeleted: true
     };
 
     res.status(201).send(response);
@@ -41,6 +43,54 @@ export const create = async (req: Request, res: Response) => {
     res.status(500).send({
       message: 'Check the log for details'
     });
+  }
+};
+
+export const getUploadUrl = async (req: Request, res: Response) => {
+  try {
+    const { postId } = req.body;
+    if (postId === undefined) {
+      console.log('postId was null');
+      res.status(400).send({ message: 'bad request' });
+      return;
+    }
+
+    const token = (req as AuthRequest).token;
+
+    const uploadUrl = await postService.getUploadUrl(postId, token.id);
+    if (uploadUrl === undefined) {
+      console.log('uploadUrl was undefined');
+      res.status(400).send({ message: 'bad request' });
+      return;
+    }
+    res.status(200).send({ uploadUrl: uploadUrl });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Check the log for details' });
+  }
+};
+
+export const postUploadCallback = async (req: Request, res: Response) => {
+  try {
+    const { postId } = req.body;
+    if (postId === undefined) {
+      console.log('postId was null');
+      res.status(400).send({ message: 'bad request' });
+      return;
+    }
+
+    const token = (req as AuthRequest).token;
+
+    const uploaded = await postService.postUploadCallback(postId);
+    if (uploaded === false) {
+      console.log('callback returned false');
+      res.status(400).send({ message: 'bad request' });
+      return;
+    }
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Check the log for details' });
   }
 };
 

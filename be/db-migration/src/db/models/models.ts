@@ -46,4 +46,5 @@ export interface UserProfileRecord {
   userId: number;
   bio: string;
   fullname: string;
+  profileImage: string;
 }

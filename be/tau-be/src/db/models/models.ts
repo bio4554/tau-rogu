@@ -34,6 +34,8 @@ export interface PostRecord {
   userId: number;
   datePosted: number;
   description: string;
+  isDeleted: boolean;
+  imageUrl?: string;
 }
 
 export type PostRecordType = {
@@ -42,6 +44,8 @@ export type PostRecordType = {
   userId: number;
   datePosted: number;
   description: string;
+  isDeleted: boolean;
+  imageUrl?: string;
 };
 
 export type PostRecordDto = {
@@ -51,6 +55,8 @@ export type PostRecordDto = {
   userName: string;
   datePosted: number;
   description: string;
+  isDeleted: boolean;
+  imageUrl?: string;
 };
 
 export interface FollowRecord {

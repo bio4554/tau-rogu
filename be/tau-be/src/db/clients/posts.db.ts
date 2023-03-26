@@ -8,7 +8,8 @@ export const insert = async (postRecord: PostRecord) => {
       title: postRecord.title,
       userId: postRecord.userId,
       datePosted: postRecord.datePosted,
-      description: postRecord.description
+      description: postRecord.description,
+      isDeleted: true
     })
     .returning('id')
     .executeTakeFirstOrThrow();
@@ -22,22 +23,39 @@ export const insert = async (postRecord: PostRecord) => {
   return { postId: result.id, username: username.name };
 };
 
+export const putPost = async (post: PostRecordType) => {
+  const result = await db
+    .updateTable('post')
+    .set(post)
+    .where('post.id', '=', post.id)
+    .execute();
+
+  return result;
+};
+
 export const getUserPosts = async (userId: number) => {
   const result = await db
     .selectFrom('post')
     .selectAll()
+    .where('post.isDeleted', '=', false)
     .where('post.userId', '=', userId)
     .execute();
 
   return result;
 };
 
-export const firstWithId = async (id: number) => {
-  const result = await db
-    .selectFrom('post')
-    .selectAll()
-    .where('post.id', '=', id)
-    .executeTakeFirst();
+export const firstWithId = async (
+  id: number,
+  includeDeleted: boolean = false
+) => {
+  let query = db.selectFrom('post').selectAll();
+  //.where('post.isDeleted', '=', false);
+
+  if (!includeDeleted) {
+    query = query.where('post.isDeleted', '=', false);
+  }
+
+  const result = await query.where('post.id', '=', id).executeTakeFirst();
 
   return result;
 };
@@ -46,6 +64,7 @@ export const getFeedFromUsers = async (users: number[]) => {
   const result = await db
     .selectFrom('post')
     .selectAll()
+    .where('post.isDeleted', '=', false)
     .where('post.userId', 'in', users)
     .orderBy('post.datePosted', 'desc')
     .limit(10)
@@ -72,7 +91,9 @@ export const getFeedFromUsers = async (users: number[]) => {
         datePosted: p.datePosted,
         userId: p.userId,
         description: p.description,
-        userName: usernameMap.find((u) => p.userId == u.id).name
+        userName: usernameMap.find((u) => p.userId == u.id).name,
+        isDeleted: p.isDeleted,
+        imageUrl: p.imageUrl
       }
   );
 };

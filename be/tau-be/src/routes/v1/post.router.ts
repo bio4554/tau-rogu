@@ -7,5 +7,7 @@ const router = Router();
 router.post('/', auth, postsController.create);
 router.get('/feed', auth, postsController.getFeed);
 router.get('/users/:userId', auth, postsController.userPosts);
+router.post('/upload-url', auth, postsController.getUploadUrl);
+router.post('/post-uploaded', auth, postsController.postUploadCallback);
 
 export default router;
