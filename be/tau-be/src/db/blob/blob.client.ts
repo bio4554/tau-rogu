@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import appConfig from '../../app.config';
 
 const s3 = new S3Client({
-  endpoint: 'http://localhost:9000',
+  endpoint: appConfig.S3Endpoint,
   region: 'test',
   credentials: {
     accessKeyId: appConfig.AwsAccessKey,

@@ -32,7 +32,7 @@ export interface PostRecord {
   id?: Generated<number>;
   title: string;
   userId: number;
-  datePosted: number;
+  datePosted: string;
   description: string;
   isDeleted: boolean;
   imageUrl?: string;
@@ -42,7 +42,7 @@ export type PostRecordType = {
   id?: number;
   title: string;
   userId: number;
-  datePosted: number;
+  datePosted: string; // todo something weird going on here with unix epoch time overflowing the number buffer
   description: string;
   isDeleted: boolean;
   imageUrl?: string;
@@ -53,7 +53,7 @@ export type PostRecordDto = {
   title: string;
   userId: number;
   userName: string;
-  datePosted: number;
+  datePosted: string;
   description: string;
   isDeleted: boolean;
   imageUrl?: string;

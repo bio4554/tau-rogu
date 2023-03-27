@@ -20,7 +20,7 @@ export const create = async (req: Request, res: Response) => {
     const postRecord: PostRecord = {
       title: title,
       description: description,
-      datePosted: Date.now(),
+      datePosted: new Date().toISOString(),
       userId: token.id,
       isDeleted: true
     };
